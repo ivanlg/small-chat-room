@@ -29,16 +29,16 @@ app.post('/edit_profile', userIsLoggedIn, async (req, res) => {
       .exec();
 
     if (user) {
-      if (!bcrypt.compareSync(values.password, user.password)) {
-        res.render('edit_profile', {
-          success: false,
-          error: true,
-          errorMessages: ['Invalid password.'],
-          loggedUser,
-        });
-        return;
-      }
-      user.password = bcrypt.hashSync(values.newPassword, 10);
+      // if (!bcrypt.compareSync(values.password, user.password)) {
+      //   res.render('edit_profile', {
+      //     success: false,
+      //     error: true,
+      //     errorMessages: ['Invalid password.'],
+      //     loggedUser,
+      //   });
+      //   return;
+      // }
+      // user.password = bcrypt.hashSync(values.newPassword, 10);
       user.name = values.name;
       const userDb = await user.save();
       req.session.user = userDb.toJSON();
