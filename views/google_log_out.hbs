@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="alert alert-danger" role="alert">
+      Logging out...
+    </div>
+  </div>
+</div>
+<div class="g-signin2" data-onsuccess="signOut" data-theme="dark" data-width="300" data-height="50" data-longtitle="true" style="display: none;"></div>
+
+<script>
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    window.location.replace('/');
+  });
+}
+</script>

@@ -1,0 +1,74 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+          <div class="card-header">Sign In</div>
+          <div class="card-body">
+            <form method="POST" class="needs-validation form-signup" novalidate>
+              <div class="form-row mt-2">
+                <div class="col">
+                  <label for="email">Email</label>
+                  <input type="text" class="form-control" id="email" name="email" required>
+                  <div class="invalid-feedback">
+                    Please provide an email.
+                  </div>
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="col">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" required>
+                  <div class="invalid-feedback">
+                    Please provide a password.
+                  </div>
+                </div>
+              </div>
+              <div id="register-link" class="text-left mt-2">
+                <a href="/sign_up" class="text-info">Register here</a>
+              </div>
+            <button class="btn btn-primary mt-2 w-100" type="submit">Sign In!</button>
+            <p class="divider-text">
+              <span class="bg-light">OR</span>
+            </p>
+            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark" data-width="300" data-height="50" data-longtitle="true"></div>
+            </form>
+            {{#if error}}
+              {{#each errorMessages}}
+                <div class="alert alert-danger mt-4" role="alert">
+                  {{this}}
+                </div>
+              {{/each}}
+            {{/if}}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  var id_token = googleUser.getAuthResponse().id_token;
+  window.location.replace(`/google_sign_in/${id_token}`);
+}
+
+</script>

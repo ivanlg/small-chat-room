@@ -1,0 +1,8 @@
+{{#if loggedUser}}
+  <a href="/edit_profile" class="btn btn-outline-primary btn-md" role="button" aria-pressed="true">Edit profile</a>
+  {{#if loggedUser.signedInWithGoogle }}
+    <a href="/google_log_out" class="btn btn-outline-primary btn-md ml-2" role="button" aria-pressed="true">Log out</a>
+  {{else}}
+    <a href="/logout" class="btn btn-outline-primary btn-md ml-2" role="button" aria-pressed="true">Log out</a>
+  {{/if}}
+{{/if}}
