@@ -24,6 +24,7 @@ const userSchema = new Schema({
   },
   img: {
     type: String,
+    default: '/assets/img/default_avatar.png',
   },
   role: {
     type: String,
@@ -43,8 +44,10 @@ const userSchema = new Schema({
 // hide password property
 userSchema.methods.toJSON = function () {
   const user = this;
+  const { signedInWithGoogle } = user;
   const userObject = user.toObject();
   delete userObject.password;
+  userObject.signedInWithGoogle = signedInWithGoogle;
 
   return userObject;
 };

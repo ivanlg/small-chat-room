@@ -20,7 +20,7 @@ app.post('/sign_up', async (req, res) => {
   });
   try {
     const userDB = await user.save();
-    req.session.user = userDB.toJSON();
+    req.session.user = userDB;
     res.redirect('/');
   } catch (err) {
     if (err instanceof mongoose.Error.ValidationError) {

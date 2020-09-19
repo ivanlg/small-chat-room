@@ -26,6 +26,18 @@
                   </div>
                 </div>
               </div>
+              <div class="form-row mt-2">
+                <div class="col d-flex justify-content-center">
+                  <img id="preview" width="128" height="128" class="rounded-circle">
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="col d-flex justify-content-center">
+                  <input type="file" class="custom-file-input" id="profilePic">
+                  <label class="custom-file-label" for="profilePic">Choose a profile picture...</label>
+                </div>
+              </div>
+              <input type="hidden" id="profilePicUrl" name="profilePicUrl">
               {{!-- <hr class="my-3">
               <div class="form-row mt-2">
                 <div class="col">
@@ -45,7 +57,7 @@
                   </div>
                 </div>
               </div> --}}
-            <button class="btn btn-primary mt-4" type="submit">Save chages</button>
+            <button class="btn btn-primary mt-4" type="submit" id="submit">Save chages</button>
             </form>
             {{#if error}}
               {{#each errorMessages}}
@@ -89,10 +101,72 @@ var loggedUser = {{{JSONStringify loggedUser}}};
 function fillLoggedUserData(loggedUser){
   $('#name').val(loggedUser.name);
   $('#email').val(loggedUser.email);
+  $('#profilePicUrl').val(loggedUser.img);
+  $('#preview').attr("src", loggedUser.img);
+}
+
+function loadingPicture(){
+  var submitButton = $('#submit');
+  submitButton.prop("disabled", true);
+  // add spinner to button
+  submitButton.html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading profile picture...`);
+}
+
+function pictureLoaded(){
+  var submitButton = $('#submit');
+  submitButton.prop("disabled", false);
+  // add spinner to button
+  submitButton.html(`Save chages`);
+}
+
+function getSignedRequest(file){
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `/sign-s3?file-name=${encodeURIComponent(file.name)}&file-type=${encodeURIComponent(file.type)}`);
+  xhr.onreadystatechange = () => {
+    if(xhr.readyState === 4){
+      if(xhr.status === 200){
+        const response = JSON.parse(xhr.responseText);
+        uploadFile(file, response.signedRequest, response.url);
+      }
+      else{
+        alert('Could not get signed URL.');
+      }
+    }
+  };
+  xhr.send();
+}
+
+function uploadFile(file, signedRequest, url){
+  const xhr = new XMLHttpRequest();
+  xhr.open('PUT', signedRequest);
+  xhr.onreadystatechange = () => {
+    if(xhr.readyState === 4){
+      if(xhr.status === 200){
+        document.getElementById('preview').src = url;
+        document.getElementById('profilePicUrl').value = url;
+        pictureLoaded();
+      }
+      else{
+        alert('Could not upload file.');
+      }
+    }
+  };
+  xhr.send(file);
 }
 
 $( document ).ready(function() {
   fillLoggedUserData(loggedUser);
+  $("#profilePic").change(function() {
+    var profilePic = $(this).prop('files')[0];
+    if (profilePic) {
+      $(this).next('.custom-file-label').html(profilePic.name);
+      loadingPicture();
+      getSignedRequest(profilePic);
+      console.log(profilePic);
+    } else {
+      $(this).next('.custom-file-label').html('Choose a profile picture...');
+    }
+  });
 });
 
 </script>

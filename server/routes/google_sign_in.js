@@ -39,6 +39,7 @@ app.get('/google_sign_in/:token', async (req, res) => {
         password: 'NO PASSWORD',
         role: roles.USER,
         google: true,
+        img: payload.picture,
       });
       userDB = await user.save();
     }
@@ -48,7 +49,7 @@ app.get('/google_sign_in/:token', async (req, res) => {
     return;
   }
 
-  req.session.user = userDB.toJSON();
+  req.session.user = userDB;
   req.session.user.signedInWithGoogle = true;
   res.redirect('/');
 });

@@ -38,7 +38,7 @@ app.post('/sign_in', async (req, res) => {
       return;
     }
 
-    req.session.user = userDB.toJSON();
+    req.session.user = userDB;
     res.redirect('/');
   });
 });

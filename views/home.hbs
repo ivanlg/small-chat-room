@@ -63,16 +63,21 @@
     });
 
     function pushNewMessage(message) {
-      var chatBox = $("#chat_box");
+      var chatBox = $('#chat_box');
+      var profilePic = message.author.img;
       var author;
+
+      if ("Administrator" === message.author.name){
+        profilePic = "/assets/img/default_avatar.png";
+      }
       if (loggedUser._id === message.author._id) {
-        author = 'You'
+        author = 'You';
       } else {
-        author = message.author.name
+        author = message.author.name;
       }
       var template = `
         <div class="media mb-3">
-          <img src="/assets/img/default_avatar.png" alt="user" width="50" class="rounded-circle">
+          <img src="${profilePic}" alt="user" width="50" height="50" class="rounded-circle">
           <div class="media-body ml-3">
             <div class="bg-light rounded py-2 px-3 mb-2">
               <div class="d-flex align-items-center justify-content-between mb-1">
