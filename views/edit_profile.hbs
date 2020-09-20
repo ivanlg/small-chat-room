@@ -76,27 +76,10 @@
   </div>
 </div>
 
-<script>
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-(function() {
-  'use strict';
-  window.addEventListener('load', function() {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
-    // Loop over them and prevent submission
-    var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
-    });
-  }, false);
-})();
+<script src="/assets/js/validate_form.js"></script>
+{{> loggedUserScript }}
 
-var loggedUser = {{{JSONStringify loggedUser}}};
+<script>
 
 function fillLoggedUserData(loggedUser){
   $('#name').val(loggedUser.name);
@@ -130,6 +113,7 @@ function getSignedRequest(file){
       }
       else{
         alert('Could not get signed URL.');
+        pictureLoaded();
       }
     }
   };
@@ -144,11 +128,11 @@ function uploadFile(file, signedRequest, url){
       if(xhr.status === 200){
         document.getElementById('preview').src = url;
         document.getElementById('profilePicUrl').value = url;
-        pictureLoaded();
       }
       else{
         alert('Could not upload file.');
       }
+      pictureLoaded();
     }
   };
   xhr.send(file);
